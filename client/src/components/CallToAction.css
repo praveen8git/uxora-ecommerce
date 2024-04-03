@@ -1,0 +1,15 @@
+.call-to-action {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border-radius: 1rem;
+  }
+  
+  .cta-btn {
+    background-color: var(--secondary-color);
+    font-size: 0.88rem;
+  }
+  .cta-btn:hover {
+    background-color: var(--secondary-color);
+    color: var(--font-color);
+    filter : contrast(80%);
+  }
