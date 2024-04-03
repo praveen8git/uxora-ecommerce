@@ -8,13 +8,19 @@ const {
 const url = `https://api.cloudinary.com/v1_1/${Cloud_Name}/image/upload`;
 
 const useImageUpload = async (file) => {
-    const uploaded = await axios.post(url, {
-        upload_preset: Upload_Preset,
-        file: file
-    })
+    const data = {
+        file,
+        upload_preset: Upload_Preset
+    }
+    const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+    };
+    const uploaded = await axios.post(url, data, config);
 
-    return uploaded.secure_url
+    return uploaded.data.secure_url
 
-} 
+}
 
 export { useImageUpload }

@@ -1,14 +1,21 @@
 import React, { useState } from 'react'
+import { useImageUpload } from '../../hooks/useImageUpload';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+
+const { VITE_SERVER } = import.meta.env;
 
 const AddNewProduct = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState();
 
   const [productName, setProductName] = useState('');
   const [shortDescription, setShortDescription] = useState('');
   const [longDescription, setLongDescription] = useState('');
 
   const [image, setImage] = useState(null);
-  const [selectedImage, setSelectedImage] = useState("https://source.unsplash.com/random/500x500/?man,fashion,cloth,placeholder");
+  // const [selectedImage, setSelectedImage] = useState("https://source.unsplash.com/random/500x500/?man,fashion,cloth,placeholder");
+  const [selectedImage, setSelectedImage] = useState("http://velocityacademy.org/wp-content/uploads/2016/03/placeholder.jpg");
 
   const [regularPrice, setRegularPrice] = useState('');
   const [salePrice, setSalePrice] = useState('');
@@ -29,18 +36,58 @@ const AddNewProduct = () => {
     featured
   };
 
-  
+  const successMessage = (productId) => (
+    <div>
+      Product added successfully! 
+      <Link to={`/product/` + productId} className="ms-2 text-dark">view</Link>
+    </div>
+  )
 
   const addProductHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    console.log(productData)
-  }
+    /*
+    *   checking if user has selected a image to upload. If it has, it calls the
+    *   `useImageUpload` (custom hook) to upload the image and assigns the result 
+    *   to the `imageUrl` variable. If image is not selected, it assigns a placeholder
+    *   image URL from Unsplash to the `imageUrl` variable. 
+    */
 
+    let imageUrl = productData.image ?
+      await useImageUpload(productData.image)
+      : "https://source.unsplash.com/random/500x500/?man,fashion,cloth,placeholder";
 
+    console.log({ ...productData, image: imageUrl })
 
+    try {
+      const response = await axios.post(
+        `${VITE_SERVER}/api/admin/add-product`,
+        {
+          ...productData,
+          image: imageUrl
+        },
+        {
+          withCredentials: true
+        }
+      )
 
+      setLoading(false);
+
+      console.log(response);
+      response.data.success
+        ? toast.success(successMessage(response.data.product._id), { className: "toastify", autoClose: 15000 })
+        : toast.error("Failed to add new sale!", { className: "toastify" });
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to add new product!", { className: "toastify" });
+      error.response.status === 403
+        ? toast.error("Session Expired, Login again!", { className: "toastify" }) && navigate('/Logout')
+        : null
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <form className="container-fluid p-0" onSubmit={addProductHandler}>
@@ -128,7 +175,7 @@ const AddNewProduct = () => {
                     </div>
                     <input type="file"
                       accept="image/*"
-                      onChange={(e) => {setImage((prev) => e.target.files[0]); setSelectedImage(URL.createObjectURL(e.target.files[0]))}}
+                      onChange={(e) => { setImage((prev) => e.target.files[0]); setSelectedImage(URL.createObjectURL(e.target.files[0])) }}
                       className='visually-hidden'
                       name="productImage"
                       id="productImage" />
@@ -262,7 +309,7 @@ const AddNewProduct = () => {
                         id="dresses"
                         checked={selectedSubCategory === "dresses"}
                         onChange={(e) => setSelectedSubCategory(e.target.value)}
-                        autoComplete="off" 
+                        autoComplete="off"
                         required />
                       <label className="filter-btn btn btn-sm border bag w-100" htmlFor="dresses">
                         Dresses
@@ -275,7 +322,7 @@ const AddNewProduct = () => {
                         id="skirts"
                         checked={selectedSubCategory === "skirts"}
                         onChange={(e) => setSelectedSubCategory(e.target.value)}
-                        autoComplete="off" 
+                        autoComplete="off"
                         required />
                       <label className="filter-btn btn btn-sm border bag w-100" htmlFor="skirts">
                         Skirts
@@ -288,7 +335,7 @@ const AddNewProduct = () => {
                         id="pants"
                         checked={selectedSubCategory === "pants"}
                         onChange={(e) => setSelectedSubCategory(e.target.value)}
-                        autoComplete="off" 
+                        autoComplete="off"
                         required />
                       <label className="filter-btn btn btn-sm border bag w-100" htmlFor="pants">
                         Pants
@@ -303,7 +350,7 @@ const AddNewProduct = () => {
                         id="shirts"
                         checked={selectedSubCategory === "shirts"}
                         onChange={(e) => setSelectedSubCategory(e.target.value)}
-                        autoComplete="off" 
+                        autoComplete="off"
                         required />
                       <label className="filter-btn btn btn-sm border bag w-100" htmlFor="shirts">
                         Shirts
@@ -316,7 +363,7 @@ const AddNewProduct = () => {
                         id="t-shirts"
                         checked={selectedSubCategory === "t-shirts"}
                         onChange={(e) => setSelectedSubCategory(e.target.value)}
-                        autoComplete="off" 
+                        autoComplete="off"
                         required />
                       <label className="filter-btn btn btn-sm border bag w-100" htmlFor="t-shirts">
                         T-shirts
@@ -329,7 +376,7 @@ const AddNewProduct = () => {
                         id="hoodies"
                         checked={selectedSubCategory === "hoodies"}
                         onChange={(e) => setSelectedSubCategory(e.target.value)}
-                        autoComplete="off" 
+                        autoComplete="off"
                         required />
                       <label className="filter-btn btn btn-sm border bag w-100" htmlFor="hoodies">
                         Hoodies
@@ -379,7 +426,19 @@ const AddNewProduct = () => {
                   {/* <h2 className="card-heading text-uppercase fs-4 font-color mb-4">
                     Submit
                   </h2> */}
-                  <button type="submit" className="btn text-uppercase d-block my-2 py-3 w-100 fw-bold" style={{ fontSize: 0.88 + 'rem' }}>Add Product</button>
+                  <button type="submit"
+                    className="btn text-uppercase d-block my-2 py-3 w-100 fw-bold"
+                    style={{ fontSize: 0.88 + 'rem' }}
+                    disabled={loading}>
+                    {
+                      loading ? (
+                        <>
+                          <span class="spinner-grow spinner-grow-sm text-dark me-2" aria-hidden="true"></span>
+                          <span role="status">Adding...</span>
+                        </>
+                      ) : "Add Product"
+                    }
+                  </button>
                 </div>
               </div>
             </div>
