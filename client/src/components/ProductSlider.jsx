@@ -4,8 +4,33 @@ import { A11y, Autoplay } from 'swiper/modules';
 import 'swiper/css/autoplay';
 import 'swiper/css';
 import ProductCard from "./ProductCard"
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+
+const { VITE_SERVER } = import.meta.env;
 
 const ProductSlider = () => {
+
+  const [products, setProducts] = useState([]);
+
+  const fetchFeaturedProducts = async () => {
+    try {
+      const response = await axios.get(`${VITE_SERVER}/api/featured-products`, {
+        withCredentials: true,
+      });
+      console.log("featured-products", response.data);
+      setProducts(response.data.products)
+
+    } catch (error) {
+      console.error(error);
+      error.message ? toast.error(error.message, { className: "toastify" }) : null
+    }
+  }
+
+  useEffect(() => {
+    fetchFeaturedProducts();
+  }, []);
+
   const breakpoints = {
     // when window width is >= 220px
     220: {
@@ -38,46 +63,20 @@ const ProductSlider = () => {
         onSlideChange={() => console.log('slide change')}
         onSwiper={(swiper) => console.log(swiper)}
       >
-        <SwiperSlide>
-          <ProductCard
-            productName={'Girl t-shirt'}
-            regularPrice={74}
-            salePrice={32.5}
-            img={''}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ProductCard
-            productName={'Black t-shirt'}
-            regularPrice={74}
-            salePrice={32.5}
-            img={'https://cdn.prod.website-files.com/63cffb7c16ab33a28e9734f2/63d4f24c2929613918600279_product-03-thumb.webp'}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ProductCard
-            productName={'Men t-shirt'}
-            regularPrice={64}
-            salePrice={37.5}
-            img={'https://cdn.prod.website-files.com/63cffb7c16ab33a28e9734f2/63d4f225026df869f409bbcc_product-01-thumb.webp'}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ProductCard
-            productName={'Girl t-shirt'}
-            regularPrice={74}
-            salePrice={32.5}
-            img={'https://source.unsplash.com/random/600x600/?girl,fashion'}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ProductCard
-            productName={'Girl t-shirt'}
-            regularPrice={74}
-            salePrice={32.5}
-            img={'https://source.unsplash.com/random/600x600/?boy,fashion'}
-          />
-        </SwiperSlide>
+        {
+          products.map(product => (
+            <SwiperSlide>
+              <ProductCard
+                key={product._id}
+                id={product._id}
+                productName={product.productName}
+                regularPrice={product.regularPrice}
+                salePrice={product.salePrice}
+                image={product.image}
+              />
+            </SwiperSlide>
+          ))
+        }
       </Swiper>
     </section>
   )

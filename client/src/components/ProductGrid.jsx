@@ -1,64 +1,24 @@
-import React from 'react'
+import axios from 'axios'
 import ProductCard from './ProductCard'
 
-const ProductGrid = () => {
+const ProductGrid = (props) => {
+    console.log(props.products);
 
     return (
         <section className="product-grid container-fluid p-0">
             <div className="row g-3">
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                    <ProductCard
-                        productName={'Girl t-shirt'}
-                        regularPrice={74}
-                        salePrice={32.5}
-                        img={''}
-                    />
-                </div>
-
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                    <ProductCard
-                        productName={'Girl t-shirt'}
-                        regularPrice={74}
-                        salePrice={32}
-                        img={''}
-                    />
-                </div>
-
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                    <ProductCard
-                        productName={'Girl t-shirt'}
-                        regularPrice={74}
-                        salePrice={32}
-                        img={''}
-                    />
-                </div>
-
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                    <ProductCard
-                        productName={'Girl t-shirt'}
-                        regularPrice={74}
-                        salePrice={32}
-                        img={''}
-                    />
-                </div>
-
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                    <ProductCard
-                        productName={'Girl t-shirt'}
-                        regularPrice={74}
-                        salePrice={32}
-                        img={''}
-                    />
-                </div>
-
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                    <ProductCard
-                        productName={'Girl t-shirt'}
-                        regularPrice={74}
-                        salePrice={32}
-                        img={'https://source.unsplash.com/random/600x600/?girl,fashion'}
-                    />
-                </div>
+                {props.products.map(product => (
+                    <div className="col-lg-4 col-md-6 col-sm-12">
+                        <ProductCard
+                            key={product._id}
+                            id={product._id}
+                            productName={product.productName}
+                            regularPrice={product.regularPrice}
+                            salePrice={product.salePrice}
+                            image={product.image}
+                        />
+                    </div>
+                ))}
             </div>
         </section>
     )

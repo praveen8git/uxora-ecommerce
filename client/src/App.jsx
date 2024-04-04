@@ -19,7 +19,20 @@ function App() {
         <BagContextProvider>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/shop" element={<Shop />} />
+            <Route path="/shop" element={<Shop category={'all'} />} />
+            <Route path="/women" >
+              <Route path="all" element={<Shop category={'women'} subCategory={''} />} />
+              <Route path="dresses" element={<Shop category={'women'} subCategory={'dresses'} />} />
+              <Route path="skirts" element={<Shop category={'women'} subCategory={'skirt'} />} />
+              <Route path="pants" element={<Shop category={'women'} subCategory={'pants'} />} />
+            </Route>
+            <Route path="/men" >
+              <Route path="all" element={<Shop category={'men'} subCategory={''} />} />
+              <Route path="hoodies" element={<Shop category={'men'} subCategory={'hoodies'} />} />
+              <Route path="shirts" element={<Shop category={'men'} subCategory={'shirt'} />} />
+              <Route path="pants" element={<Shop category={'men'} subCategory={'pants'} />} />
+            </Route>
+            <Route path="/kids" element={<Shop category={'kids'} subCategory={''} />} />
             <Route path="/search" element={<Search />} />
             <Route path="/product/:id" element={<SingleProduct />} />
             <Route path="/contact" element={<Contact />} />
@@ -36,7 +49,7 @@ function App() {
               <Route path="customers" element={<Customers />} />
               <Route path="customers/:id" element={<CustomerDetails />} />
             </Route>
-            <Route path="*" element={<PageNotFound/>} />
+            <Route path="*" element={<PageNotFound />} />
 
           </Routes>
         </BagContextProvider>
