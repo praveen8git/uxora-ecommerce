@@ -132,7 +132,7 @@ const getProductsByCategory = async (req, res) => {
 }
 
 const searchProducts = async (req, res) => {
-    console.log(req.params);
+    
     const { query } = req.params;
     try {
         const products = await Product.find({productName: { $regex: new RegExp(query, "i") }});
@@ -145,8 +145,17 @@ const searchProducts = async (req, res) => {
     }
 }
 
-const deleteProductById = async (res, req) => {
-
+const deleteProductById = async (req, res) => {
+    const { id } = re.params;
+    try {
+        const deletedProduct = await Product.findOneAndDelete({_id: id });
+        deletedProduct ?
+                res.status(201).json({ success: true, message:"Product deleted successfully!" })
+                : res.status(404).json({ success: false, message: "Product not found!" })
+    } catch (error) {
+        console.error(error);
+            res.status(500).json({ success: false, message: error });
+    }
 }
 
 
