@@ -5,6 +5,6 @@ import { addProduct, deleteProductById } from '../controllers/productController.
 const adminRouter = express.Router();
 
 adminRouter.post('/add-product', addProduct);
-adminRouter.post('/delete-product/:id', addProduct);
+adminRouter.delete('/delete-product/:id', deleteProductById);
 
 export default adminRouter;

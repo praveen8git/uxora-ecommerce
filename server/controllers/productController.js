@@ -146,7 +146,7 @@ const searchProducts = async (req, res) => {
 }
 
 const deleteProductById = async (req, res) => {
-    const { id } = re.params;
+    const { id } = req.params;
     try {
         const deletedProduct = await Product.findOneAndDelete({_id: id });
         deletedProduct ?
