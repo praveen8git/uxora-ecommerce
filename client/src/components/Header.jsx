@@ -2,6 +2,9 @@ import { useCallback, useEffect, useState, useContext } from 'react';
 import debounce from 'lodash/debounce';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
+
+import BagContext from '../contexts/BagContext';
+import IsAuthenticatedContext from '../contexts/IsAuthenticatedContext';
 // import { appContext } from '../App';
 
 const Header = () => {
@@ -19,6 +22,9 @@ const Header = () => {
     //     }, 500),
     //     []
     // );
+
+    const { bagItems } = useContext(BagContext);
+    const { isAuthenticated } = useContext(IsAuthenticatedContext);
 
     return (
         <>
@@ -46,13 +52,24 @@ const Header = () => {
                             </form>
                         </ul>
                         <ul className="navbar-nav col-sm-4 font-color justify-content-end">
-                            <Link to="/login" id="login" className="btn nav-link font-color bg-color px-4 py-2 mx-2 text-uppercase"
-                                style={{ fontSize: 0.88 + 'rem' }}>Login</Link>
+                            {
+                                !isAuthenticated ? (
+                                    <Link to="/login" id="login" className="btn nav-link font-color bg-color px-4 py-2 mx-2 text-uppercase"
+                                        style={{ fontSize: 0.88 + 'rem' }}>
+                                        Login
+                                    </Link>
+                                ) : (
+                                    <Link to="/profile" id="profile" className="btn nav-link font-color bg-color px-4 py-2 mx-2 text-uppercase"
+                                        style={{ fontSize: 0.88 + 'rem' }}>
+                                        Profile
+                                    </Link>
+                                )
+                            }
                             <Link to="/bag" className="py-1 text-center text-decoration-none">
                                 <span className="fas mx-2 fs-4 bag position-relative">
                                     &#xf290;
                                     <span className='position-absolute translate-middle ms-1 fs-6 login-heading small-font'>
-                                        3
+                                        {bagItems.length}
                                     </span>
                                 </span>
                                 {/* <i className="ai ai-bag-fill mx-2 fs-3 bag position-relative"></i> */}

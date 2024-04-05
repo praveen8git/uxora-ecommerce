@@ -8,6 +8,9 @@ const ProductCard = ({ id, productName, regularPrice, salePrice, image }) => {
 
     const item = {
         id,
+        productName,
+        image,
+        salePrice,
         quantity: 1
     }
 

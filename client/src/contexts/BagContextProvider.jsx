@@ -1,15 +1,32 @@
 import { useState } from "react";
 import BagContext from "./BagContext";
+import { toast } from "react-toastify";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const BagContextProvider = ({ children }) => {
-    const [bagItems, setBagItems] = useState([]);
+    // const [bagItems, setBagItems] = useState([]);
+    const [bagItems, setBagItems] = useLocalStorage('bag', []);
 
     const addToBag = (item) => {
-        setBagItems([...bagItems, item]);
+        console.log(bagItems,"bagItems");
+        setBagItems(bagItems => {
+            const itemExists = bagItems.find(itemFromBag => itemFromBag.id === item.id);
+            if(!itemExists) {
+                toast.success("Product Added to the bag!", {className: "toastify", autoClose: 4000})
+                console.log([...bagItems, item]);
+                return [...bagItems, item];
+            } else {
+                toast.error("This Product already present in bag!", { className: "toastify", autoclose: 4000 })
+                // console.log(bagItems,'current bag items');
+                return bagItems
+            }
+        });
+        
     }
 
     const removeFromBag = (itemId) => {
         setBagItems(bagItems.filter(item => item.id !== itemId));
+        console.log(itemId,'removed');
     }
 
     const increaseQuantity = (itemId) => {

@@ -43,6 +43,9 @@ const SingleProduct = () => {
     e.preventDefault();
     const item = {
       id: product._id,
+      productName: product.productName,
+      image: product.image,
+      salePrice: product.salePrice,
       quantity
     }
     addToBag(item);
