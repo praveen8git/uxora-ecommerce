@@ -24,8 +24,7 @@ const addProduct = async (req, res) => {
                 regularPrice &&
                 salePrice &&
                 category &&
-                subCategory &&
-                featured)
+                subCategory)
         ) {
             res.status(400).json({ message: "All fields are mandatory!" });
             return;
@@ -59,7 +58,7 @@ const getAllProducts = async (req, res) => {
         const allProducts = await Product.find({});
 
         // Respond with success and products array
-        res.status(201).json({ success: true, allProducts });
+        res.status(200).json({ success: true, allProducts });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: error });
@@ -95,7 +94,7 @@ const getProductById = async (req, res) => {
         const product = await Product.findById(id);
 
         product ?
-            res.status(201).json({ success: true, product })
+            res.status(200).json({ success: true, product })
             : res.status(404).json({ success: false, message: "Product not found!" })
 
     } catch (error) {

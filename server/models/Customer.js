@@ -31,6 +31,6 @@ const CustomerSchema = new mongoose.Schema({
         default: "customer"
     },
     token: String
-})
+},{timestamps: true})
 
 export default mongoose.model('Customer', CustomerSchema);

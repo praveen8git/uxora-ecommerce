@@ -1,55 +1,10 @@
 // importing necessary modules and dependencies for the authentication 
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import User from "../models/User.js";
+import Customer from "../models/Customer.js";
 
 const { JWT_SECRET } = process.env;
 
-const register = async (req, res, data) => {
-
-    try {
-        const { firstName, lastName, email, password } = data;
-        
-        if (!(firstName && lastName && email && password)) {
-            res.status(400).json({ message: "All fields are mandatory!" })
-            return
-        }
-
-        const userExist = await User.findOne({ email: email });
-        if (userExist) {
-            res.status(400).json({ message: "This email already registered!" })
-            return
-        }
-
-        const encryptedPassword = await bcrypt.hash(password, 10);
-
-        const user = await User.create({
-            firstName,
-            lastName,
-            email,
-            password: encryptedPassword
-        });
-
-        const token = jwt.sign({ _id: user._id }, JWT_SECRET);
-
-        user.token = token;
-        user.password = undefined;
-
-        const options = {
-            // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day
-            maxAge: 24 * 60 * 60 * 1000, // 1 day
-            httpOnly: true
-        }
-
-        res.status(201).cookie("token", token, options).json({ success: true, user });
-        console.log("A new user:", user._id, "registered!");
-
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: error })
-    }
-}
 
 const login = async (req, res) => {
     try {
@@ -59,32 +14,32 @@ const login = async (req, res) => {
             return
         }
 
-        const user = await User.findOne({ email: email });
-        if (!user) {
+        const customer = await Customer.findOne({ email: email });
+        if (!customer) {
             res.status(401).json({ message: "Incorrect email!" });
             return
         }
 
-        const matchPassword = await bcrypt.compare(password, user.password);
+        const matchPassword = await bcrypt.compare(password, customer.password);
         if (!matchPassword) {
             res.status(401).json({ message: "Incorrect password!" });
             return
         }
 
-        const token = jwt.sign({ _id: user._id }, JWT_SECRET);
+        const token = jwt.sign({ _id: customer._id, role: customer.role }, JWT_SECRET);
 
-        user.token = token;
-        user.password = undefined;
+        customer.token = token;
+        customer.password = undefined;
 
-        const options = {
+        const cookieOptions = {
             // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day
             // expires: new Date(Date.now() + 1 * 60 * 1000), // 1 min
             maxAge: 24 * 60 * 60 * 1000, // 1 day
             httpOnly: true
         }
 
-        res.status(201).cookie("token", token, options).json({ success: true, user });
-        console.log("user:", user._id, "logged in!");
+        res.status(201).cookie("token", token, cookieOptions).json({ success: true, customer });
+        console.log("customer:", customer._id, "logged in!");
 
 
     } catch (error) {
@@ -105,4 +60,4 @@ const logout = async (req, res) => {
 }
 
 
-export { register, login, logout, isLoggedIn };
+export { login, logout, isLoggedIn };

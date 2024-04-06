@@ -9,6 +9,10 @@ const OrderSchema = new mongoose.Schema({
          }],
         required: true
     },
+    shippingAddress: {
+        type: Object,
+        required: true
+    },
     subTotal: {
         type: Number,
         required: true
