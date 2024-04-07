@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const OrdersTable = ({ action }) => {
+const OrdersTable = ({ orders, action, deleteHandler }) => {
     return (
 
         <div className="card container-fluid bg-colo h-100">
@@ -25,57 +25,39 @@ const OrdersTable = ({ action }) => {
                                 </tr>
                             </thead>
                             <tbody className='font-color fs-6'>
-                                <tr className='border-bottom border-warning border-opacity-10'>
-                                    <td className='p-2'>#12345</td>
-                                    <td>Delivered</td>
-                                    <td>Paid</td>
-                                    <td>$76.00</td>
-                                    {action ? (
-                                        <td>
-                                            <Link className='text-decoration-none me-3'>
-                                                <i className="ai ai-eye-fill action bag"></i>
-                                            </Link>
-                                            <Link className='text-decoration-none'>
-                                                <i className="ai ai-trash-fill action bag"></i>
-                                            </Link>
+                                {
+                                    orders.length > 0 ?
+                                        (
+                                            orders.map(order => (
+                                                <tr key={order.orderId} className='border-bottom border-warning border-opacity-10'>
+                                                    <td className='p-2'>{order.orderId}</td>
+                                                    <td>{order.orderStatus}</td>
+                                                    <td>{order.paymentStatus}</td>
+                                                    <td>${order.total}.00</td>
+                                                    {action ? (
+                                                        <td>
+                                                            <Link to={`${order._id}`} className='text-decoration-none me-3'>
+                                                                <i className="ai ai-eye-fill action bag"></i>
+                                                            </Link>
+                                                            <Link
+                                                                onClick={() => { deleteHandler(order._id) }}
+                                                                className='text-decoration-none'>
+                                                                <i className="ai ai-trash-fill action bag"></i>
+                                                            </Link>
+                                                        </td>
+                                                    ) : null}
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td className='p-2'>No</td>
+                                                <td>Orders</td>
+                                                <td>Found</td>
+                                                <td></td>
+                                            </tr>
+                                        )
 
-                                        </td>
-                                    ) : null}
-                                </tr>
-                                <tr className='border-bottom border-warning border-opacity-10'>
-                                    <td className='p-2'>#12346</td>
-                                    <td>Processing</td>
-                                    <td>Paid</td>
-                                    <td>$46.00</td>
-                                    {action ? (
-                                        <td>
-                                            <Link className='text-decoration-none me-3'>
-                                                <i className="ai ai-eye-fill action bag"></i>
-                                            </Link>
-                                            <Link className='text-decoration-none'>
-                                                <i className="ai ai-trash-fill action bag"></i>
-                                            </Link>
-
-                                        </td>
-                                    ) : null}
-                                </tr>
-                                <tr className='border-bottom border-warning border-opacity-10'>
-                                    <td className='p-2'>#12346</td>
-                                    <td>Processing</td>
-                                    <td>Paid</td>
-                                    <td>$46.00</td>
-                                    {action ? (
-                                        <td>
-                                            <Link className='text-decoration-none me-3'>
-                                                <i className="ai ai-eye-fill action bag"></i>
-                                            </Link>
-                                            <Link className='text-decoration-none'>
-                                                <i className="ai ai-trash-fill action bag"></i>
-                                            </Link>
-
-                                        </td>
-                                    ) : null}
-                                </tr>
+                                }
                             </tbody>
                         </table>
                     </div>

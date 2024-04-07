@@ -1,7 +1,65 @@
+import axios from 'axios';
 import { Link } from "react-router-dom"
 import { PageTitle } from "../../components"
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+
+const { VITE_SERVER } = import.meta.env;
 
 const Customers = () => {
+  const [loading, setLoading] = useState();
+
+  const [allCustomers, setAllCustomers] = useState([]);
+
+  const fetchAllCustomers = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${VITE_SERVER}/api/admin/all-customers`, {
+        withCredentials: true,
+      });
+      console.log("all-customers", response.data.allCustomers);
+      setAllCustomers(response.data.allCustomers)
+      setLoading(false);
+
+    } catch (error) {
+      console.error(error);
+      error.message ? toast.error(error.message, { className: "toastify" }) : null
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const deleteHandler = async (id) => {
+    setLoading(true);
+
+    try {
+
+      const response = await axios.delete(`${VITE_SERVER}/api/admin/delete-customer/${id}`, {
+        withCredentials: true,
+      });
+      console.log("deleteHandler", response.data);
+
+      response.data.success ?
+        toast.success("Customer deleted successfully!", { className: "toastify" }) : null;
+
+      setLoading(false);
+
+      // remove product from table
+      setAllCustomers.filter(item => item._id != id)
+
+    } catch (error) {
+      console.error(error);
+      error.message ? toast.error(error.message, { className: "toastify" }) : null;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchAllCustomers();
+  }, [])
+
+
   return (
     <>
       {/* <PageTitle title={"Products"} /> */}
@@ -18,46 +76,65 @@ const Customers = () => {
                     Find all your customers and their details below. Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                   </p>
                   <div className="table-responsive">
-                    <table className="order-table w-100">
-                      <thead className='card-heading text-uppercase font-color fs-6 bag'>
-                        <tr className='border-bottom border-warning border-opacity-10'>
-                          <th className='p-1'>#</th>
-                          <th></th>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Pincode</th>
-                          <th>Country</th>
-                          <th>Total Spent {'($)'}</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody className='font-color fs-6'>
-                        <tr className='border-bottom border-warning border-opacity-10'>
-                          <td className='p-2'>1</td>
-                          <td className="table-image">
-                            <img
-                              className="object-fit-cover rounded-circle p-3"
-                              src="https://source.unsplash.com/random/500x500/?man,dp"
-                              alt="" />
-                          </td>
-                          <td>Frederick C. Frazier</td>
-                          <td>Frederick@email.com </td>
-                          <td>25623</td>
-                          <td>Canada</td>
-                          <td>328</td>
-                          <td>
-                            <Link className='text-decoration-none me-3'>
-                              <i className="ai ai-eye-fill action bag"></i>
-                            </Link>
-                            <Link className='text-decoration-none'>
-                              <i className="ai ai-trash-fill action bag"></i>
-                            </Link>
+                    {
+                      loading ? (
+                        <div className="d-flex h-100 justify-content-center align-items-center">
+                          <span className="spinner-grow spinner-grow bag" aria-hidden="true"></span>
+                        </div>
+                      ) : (
+                        allCustomers.length > 0 ? (
+                          <>
+                            <table className="order-table w-100" >
+                              <thead className='card-heading text-uppercase font-color fs-6 bag'>
+                                <tr className='border-bottom border-warning border-opacity-10'>
+                                  <th className='p-1'>#</th>
+                                  <th></th>
+                                  <th>Name</th>
+                                  <th>Email</th>
+                                  <th>Pincode</th>
+                                  <th>Country</th>
+                                  {/* <th>Total Spent {'($)'}</th> */}
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody className='font-color fs-6'>
+                                {allCustomers.map((customer, index) => (
+                                  <tr className='border-bottom border-warning border-opacity-10' key={customer._id}>
+                                    <td className='p-2'>{index + 1}</td>
+                                    <td className="table-image">
+                                      <img
+                                        className="object-fit-cover rounded-circle p-3"
+                                        src={customer.profilePicture}
+                                        alt="dp" />
+                                    </td>
+                                    <td>{customer.fullName}</td>
+                                    <td>{customer.email}</td>
+                                    <td>{customer.address.pincode}</td>
+                                    <td>{customer.address.country}</td>
+                                    {/* <td>328</td> */}
+                                    <td>
+                                      <Link to={customer._id} className='text-decoration-none me-3'>
+                                        <i className="ai ai-eye-fill action bag"></i>
+                                      </Link>
+                                      <Link
+                                        onClick={() => { deleteHandler(customer._id) }}
+                                        className='text-decoration-none'>
+                                        <i className="ai ai-trash-fill action bag"></i>
+                                      </Link>
 
-                          </td>
-                        </tr>
-                        
-                      </tbody>
-                    </table>
+                                    </td>
+                                  </tr>
+                                ))
+                                }
+
+                              </tbody>
+                            </table>
+                          </>
+                        ) : (
+                          <div className="font-color text-center w-100">No Customers to show!</div>
+                        )
+                      )
+                    }
                   </div>
                 </div>
               </div>

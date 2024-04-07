@@ -23,7 +23,8 @@ const CustomerSchema = new mongoose.Schema({
         required: true
     },
     profilePicture: {
-        type: String
+        type: String,
+        default: "https://source.unsplash.com/random/500x500/?man,dp"
     },
     role: {
         type: String,

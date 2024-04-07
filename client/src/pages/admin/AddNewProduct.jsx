@@ -433,7 +433,7 @@ const AddNewProduct = () => {
                     {
                       loading ? (
                         <>
-                          <span class="spinner-grow spinner-grow-sm text-dark me-2" aria-hidden="true"></span>
+                          <span className="spinner-grow spinner-grow-sm text-dark me-2" aria-hidden="true"></span>
                           <span role="status">Adding...</span>
                         </>
                       ) : "Add Product"

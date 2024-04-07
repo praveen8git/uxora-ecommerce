@@ -8,9 +8,8 @@ const ProductGrid = (props) => {
         <section className="product-grid container-fluid p-0">
             <div className="row g-3">
                 {props.products.map(product => (
-                    <div className="col-lg-4 col-md-6 col-sm-12">
+                    <div className="col-lg-4 col-md-6 col-sm-12" key={product._id}>
                         <ProductCard
-                            key={product._id}
                             id={product._id}
                             productName={product.productName}
                             regularPrice={product.regularPrice}

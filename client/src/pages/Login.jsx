@@ -1,11 +1,15 @@
 import { Footer, Header } from '../components';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify";
+import IsAuthenticatedContext from '../contexts/IsAuthenticatedContext';
 
 const { VITE_SERVER } = import.meta.env;
 
 const Login = () => {
+    const navigate = useNavigate();
+    const { login } = useContext(IsAuthenticatedContext);
 
     const [formData, setFormData] = useState({});
     const [loading, setLoading] = useState(false);
@@ -18,22 +22,41 @@ const Login = () => {
     // Handles login
     const handleLogin = async (e) => {
         e.preventDefault();
-        toast.error("Hello There!", {className: "toastify"})
-        // setLoading(true);
-        // try {
-        //     const response = await axios.post(VITE_SERVER + "/auth/login", formData, {
-        //         withCredentials: true,
-        //     });
-        // } catch (error) {
-        //     if (error.code === "ERR_NETWORK") {
-        //         toast.error("Server Down!");
-        //     }
-        //     error?.response.status === 401
-        //         ? toast.error(error.response.data.message)
-        //         : toast.error("Server Error");
-        // } finally {
-        //     setLoading(false);
-        // }
+        setLoading(true);
+
+        // login();
+
+        // toast.success("Hello There!", {className: "toastify", autoClose: 15000})
+     
+        try {
+            const response = await axios.post(VITE_SERVER + "/auth/login", formData, {
+                withCredentials: true,
+            });
+            console.log(response.data);
+            if (response.data.customer) {
+                login({
+                    _id: response.data.customer._id,
+                    role: response.data.customer.role
+                });
+                toast.success("logged in successfully!", { className: "toastify" })
+                if (response.data.customer.role === "admin") {
+                    navigate("/admin")
+                } else {
+                    navigate("/profile")
+                }
+            }
+
+        } catch (error) {
+            console.log(error);
+            if (error.code === "ERR_NETWORK") {
+                toast.error("Server Down!");
+            }
+            error?.response?.status === 401
+                ? toast.error(error.response.data.message)
+                : toast.error("Server Error");
+        } finally {
+            setLoading(false);
+        }
     };
 
 

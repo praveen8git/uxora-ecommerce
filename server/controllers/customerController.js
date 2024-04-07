@@ -2,10 +2,10 @@ import Customer from "../models/Customer.js";
 
 const getAllCustomers =  async (req, res) => {
     try {
-        const allCustomers = await Customer.find({});
+        const allCustomers = await Customer.find({role: "customer"});
 
         const customersWithoutPassword = allCustomers.map(customer => {
-            return {...customer, password: undefined}
+            return {...customer._doc, password: undefined}
         });
 
         // Respond with success and customers array

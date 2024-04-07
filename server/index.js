@@ -23,8 +23,8 @@ app.use(cookieParser());
 
 // routes
 app.use('/api/admin', adminRouter);
-app.use('/api/', customerRouter);
-app.use('/', authRouter);
+app.use('/api', customerRouter);
+app.use('/auth', authRouter);
 
 
 app.listen(PORT, () => {

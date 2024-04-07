@@ -17,7 +17,7 @@ const placeOrder = async (req, res) => {
         street,
         city,
         state,
-        counrty,
+        country,
         pincode,
         shippingFees,
         subTotal,
@@ -44,7 +44,7 @@ const placeOrder = async (req, res) => {
                 street,
                 city,
                 state,
-                counrty,
+                country,
                 pincode
             }
 
@@ -97,7 +97,7 @@ const placeOrder = async (req, res) => {
             street,
             city,
             state,
-            counrty,
+            country,
             pincode
         }
         // save order
