@@ -49,7 +49,9 @@ const login = async (req, res) => {
 }
 
 const isLoggedIn = (req, res) => {
-    res.status(201).json({ success: true, message: "User is Logged in" });
+    const { user } = req
+    // console.log(user);
+    res.status(201).json({ success: true, user});
 }
 
 const logout = async (req, res) => {

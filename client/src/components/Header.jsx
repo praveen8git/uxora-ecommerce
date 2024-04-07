@@ -24,7 +24,7 @@ const Header = () => {
     // );
 
     const { bagItems } = useContext(BagContext);
-    const { isAuthenticated } = useContext(IsAuthenticatedContext);
+    const { isAuthenticated, user } = useContext(IsAuthenticatedContext);
 
     return (
         <>
@@ -59,10 +59,18 @@ const Header = () => {
                                         Login
                                     </Link>
                                 ) : (
-                                    <Link to="/profile" id="profile" className="btn nav-link font-color bg-color px-4 py-2 mx-2 text-uppercase"
-                                        style={{ fontSize: 0.88 + 'rem' }}>
-                                        Profile
-                                    </Link>
+                                    user.role === "admin" ?
+                                        (
+                                            <Link to="/admin" id="profile" className="btn nav-link font-color bg-color px-4 py-2 mx-2 text-uppercase"
+                                                style={{ fontSize: 0.88 + 'rem' }}>
+                                                Dashboard
+                                            </Link>
+                                        ) : (
+                                            <Link to="/profile" id="profile" className="btn nav-link font-color bg-color px-4 py-2 mx-2 text-uppercase"
+                                                style={{ fontSize: 0.88 + 'rem' }}>
+                                                Profile
+                                            </Link>
+                                        )
                                 )
                             }
                             <Link to="/bag" className="py-1 text-center text-decoration-none">

@@ -1,37 +1,48 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useLayoutEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { Cursor } from "./components";
+import axios from "axios";
+import { Cursor, Logout } from "./components";
 import { Home, Shop, Contact, Login, Bag, SingleProduct, Profile, Search, PageNotFound } from "./pages";
 import { AdminLayout, Products, AddNewProduct, Customers, Dashboard, Orders, CustomerDetails, OrderDetails } from "./pages/admin";
 import { ToastContainer } from "react-toastify";
 import BagContextProvider from "./contexts/BagContextProvider";
-import IsAuthenticatedContextProvider from "./contexts/IsAuthenticatedContextProvider";
+
+import IsAuthenticatedContext from "./contexts/IsAuthenticatedContext";
+
+const { VITE_SERVER } = import.meta.env;
 
 // export const appContext = createContext();
 function App() {
 
   // const [search, SetSearch] = useState();
 
+  const { login } = useContext(IsAuthenticatedContext);
+
+  const isLoggedin = async () => {
+      try {
+        const response = await axios.get(`${VITE_SERVER}/auth/is-logged-in`, {
+          withCredentials: true,
+        })
+        if (response.data.success) {
+          // console.log('isloggedin', response.data.user);
+          login(response.data.user);
+        }
+      } catch (error) {
+        console.error(error)
+      }
+  }
+
+  useLayoutEffect(()=>{
+    isLoggedin();
+  }, [])
+
   return (
     <>
       {/* <appContext.Provider value={{search, SetSearch}} > */}
-      <IsAuthenticatedContextProvider>
         <BagContextProvider>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop category={'all'} />} />
-            <Route path="/women" >
-              <Route path="all" element={<Shop category={'women'} subCategory={''} />} />
-              <Route path="dresses" element={<Shop category={'women'} subCategory={'dresses'} />} />
-              <Route path="skirts" element={<Shop category={'women'} subCategory={'skirt'} />} />
-              <Route path="pants" element={<Shop category={'women'} subCategory={'pants'} />} />
-            </Route>
-            <Route path="/men" >
-              <Route path="all" element={<Shop category={'men'} subCategory={''} />} />
-              <Route path="hoodies" element={<Shop category={'men'} subCategory={'hoodies'} />} />
-              <Route path="shirts" element={<Shop category={'men'} subCategory={'shirt'} />} />
-              <Route path="pants" element={<Shop category={'men'} subCategory={'pants'} />} />
-            </Route>
             <Route path="/kids" element={<Shop category={'kids'} subCategory={''} />} />
             <Route path="/search" element={<Search />} />
             <Route path="/product/:id" element={<SingleProduct />} />
@@ -39,6 +50,22 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/bag" element={<Bag />} />
+            <Route path="/logout" element={<Logout />} />
+
+            <Route path="/women" >
+              <Route path="all" element={<Shop category={'women'} subCategory={''} />} />
+              <Route path="dresses" element={<Shop category={'women'} subCategory={'dresses'} />} />
+              <Route path="skirts" element={<Shop category={'women'} subCategory={'skirts'} />} />
+              <Route path="pants" element={<Shop category={'women'} subCategory={'pants'} />} />
+            </Route>
+
+            <Route path="/men" >
+              <Route path="all" element={<Shop category={'men'} subCategory={''} />} />
+              <Route path="hoodies" element={<Shop category={'men'} subCategory={'hoodies'} />} />
+              <Route path="shirts" element={<Shop category={'men'} subCategory={'shirts'} />} />
+              <Route path="pants" element={<Shop category={'men'} subCategory={'pants'} />} />
+            </Route>
+
             <Route path="/admin" element={<AdminLayout />} >
               <Route path="" element={<Dashboard />} />
               <Route path="dashboard" element={<Dashboard />} />
@@ -49,11 +76,11 @@ function App() {
               <Route path="customers" element={<Customers />} />
               <Route path="customers/:id" element={<CustomerDetails />} />
             </Route>
+
             <Route path="*" element={<PageNotFound />} />
 
           </Routes>
         </BagContextProvider>
-      </IsAuthenticatedContextProvider>
       {/* </appContext.Provider> */}
 
       <ToastContainer />

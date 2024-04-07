@@ -29,6 +29,10 @@ const BagContextProvider = ({ children }) => {
         console.log(itemId,'removed');
     }
 
+    const emptyBag = () => {
+        setBagItems([]);
+    }
+
     const increaseQuantity = (itemId) => {
         setBagItems(bagItems.map(item => {
             if (item.id === itemId) {
@@ -53,6 +57,7 @@ const BagContextProvider = ({ children }) => {
                 bagItems,
                 addToBag,
                 removeFromBag,
+                emptyBag,
                 increaseQuantity,
                 decreaseQuantity
             }}>

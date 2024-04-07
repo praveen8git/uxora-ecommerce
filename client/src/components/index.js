@@ -9,6 +9,7 @@ import Cursor from "./Cursor";
 import PageTitle from "./PageTitle";
 import ProductGrid from "./ProductGrid";
 import OrdersTable from "./OrdersTable";
+import Logout from "./Logout";
 
 
 export {
@@ -22,5 +23,6 @@ export {
     Cursor,
     PageTitle,
     ProductGrid,
-    OrdersTable
+    OrdersTable,
+    Logout
 }

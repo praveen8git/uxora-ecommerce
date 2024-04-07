@@ -1,5 +1,6 @@
+import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import BagContext from "../contexts/BagContext";
 import IsAuthenticatedContext from "../contexts/IsAuthenticatedContext";
 import { toast } from "react-toastify";
@@ -7,10 +8,6 @@ import { toast } from "react-toastify";
 const { VITE_SERVER } = import.meta.env;
 
 const BagItem = ({ id, image, productName, quantity, salePrice }) => {
-
-    const deleteItem = () => {
-
-    }
 
     const { increaseQuantity, decreaseQuantity, removeFromBag } = useContext(BagContext);
 
@@ -55,13 +52,14 @@ const BagItem = ({ id, image, productName, quantity, salePrice }) => {
 
 const Bag = () => {
     const [loading, setLoading] = useState();
+    const navigate = useNavigate();
 
     // check if customer is logged in
-    const { isAuthenticated, user } = useContext(IsAuthenticatedContext);
+    const { isAuthenticated, user, login } = useContext(IsAuthenticatedContext);
+    // console.log(user.id);
 
     // use bag context to get all items of the bag
-    const { bagItems } = useContext(BagContext);
-    console.log(bagItems);
+    const { bagItems, removeFromBag, emptyBag } = useContext(BagContext);
 
     // creating states for order summery
     const [subTotal, setSubTotal] = useState(0);
@@ -75,31 +73,57 @@ const Bag = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const placeOrder = async () => {
+    const placeOrder = async (e) => {
+        e.preventDefault();
+        const products = bagItems.map(item => item.id)
         const payload = {
+            products,
             ...formData,
             shippingFees,
             subTotal,
             total,
-            orderBy: user
+            orderBy: user?._id
         }
 
         try {
             const response = await axios.post(VITE_SERVER + "/api/place-order", payload, {
                 withCredentials: true,
             });
-            console.log(response.data);
-            toast.success("Order Placed Successfully!",  {className: "toastify", autoClose: 6000})
+
+            if (response.data.createdOrder) {
+                console.log(response.data);
+                toast.success("Order Placed Successfully!", { className: "toastify", autoClose: 6000 })
+
+                // empty bag
+                emptyBag();
+
+                // login user if registered
+                if (response.data.createdCustomer) {
+                    login({
+                        _id: response.data.createdCustomer._id,
+                        role: response.data.createdCustomer.role
+                    });
+                    toast.success("logged in successfully!", { className: "toastify" })
+
+                    // navigate("/profile")
+                }
+
+                navigate('/profile');
+            }
+
+
         } catch (error) {
             console.error(error);
-            toast.error("Couldn't place order due to a Error")
+            toast.error("Couldn't place order due to an Error", { className: "toastify" })
         }
     }
 
     // when bagItems changes, it multiply price of each item with it's quantity using map method and then adds up all using reduce method, and set the value of subtotal
     useEffect(() => {
         setSubTotal(
-            bagItems.map(item => item.salePrice * item.quantity).reduce((a, b) => a + b)
+            (bagItems.length > 0) ?
+                bagItems.map(item => item.salePrice * item.quantity).reduce((a, b) => a + b)
+                : 0
         );
     }, [bagItems])
 
@@ -132,7 +156,7 @@ const Bag = () => {
                                     {/* <!-- Products  --> */}
                                     {
                                         bagItems.length > 0 ?
-                                            bagItems.map(item => (<BagItem key={item.id} {...item} />)) : "No Item in Bag"
+                                            bagItems.map(item => (<BagItem key={item.id} {...item} />)) : (<div className="font-color">...No Items in bag</div>)
                                     }
 
                                 </div>
@@ -141,7 +165,7 @@ const Bag = () => {
                     </div>
 
                     {/* Customer Info for sign up */}
-                    <div className="card container-fluid p-3 mb-3">
+                    <div className={`card container-fluid p-3 mb-3 ${isAuthenticated ? 'd-none' : ''}`}>
                         <div className="card-body p-3">
                             <div className="row">
                                 <div className="col">
@@ -156,7 +180,7 @@ const Bag = () => {
                                         name="fullName"
                                         onChange={(e) => onChangeHandler(e)}
                                         placeholder=""
-                                        required />
+                                        required={!isAuthenticated} />
 
 
                                     <div className="row gap-3 px-2">
@@ -168,7 +192,7 @@ const Bag = () => {
                                                 name="email"
                                                 onChange={(e) => onChangeHandler(e)}
                                                 placeholder=""
-                                                required />
+                                                required={!isAuthenticated} />
                                         </div>
                                         <div className="col-md p-0">
                                             <label htmlFor="phone" className="font-color product-card-price mb-1">Phone *</label>
@@ -178,11 +202,11 @@ const Bag = () => {
                                                 name="phone"
                                                 onChange={(e) => onChangeHandler(e)}
                                                 placeholder=""
-                                                required />
+                                                required={!isAuthenticated} />
                                         </div>
                                     </div>
 
-                                    <div className={`row gap-3 px-2 ${isAuthenticated ? 'd-none' : ''}`}>
+                                    <div className={`row gap-3 px-2 `}>
                                         <div className="col-md p-0">
                                             <label htmlFor="password" className="font-color product-card-price mb-1">Password *</label>
                                             <input type="password"
@@ -300,7 +324,7 @@ const Bag = () => {
                                     <div className="row gap-3 px-2">
                                         <div className="col-md p-0">
                                             <label htmlFor="expiry" className="font-color product-card-price mb-1">Expiry Date *</label>
-                                            <input type="text"
+                                            <input type="date"
                                                 className="login-input font-color d-block w-100"
                                                 id="expiry"
                                                 name="expiry"
@@ -354,7 +378,7 @@ const Bag = () => {
                                         type="submit"
                                         className="btn text-uppercase d-block my-2 py-3 w-100 fw-bold"
                                         style={{ fontSize: 0.88 + 'rem' }}
-                                        disabled={loading}>
+                                        disabled={loading || bagItems.length == 0}>
                                         {
                                             loading ? (
                                                 <>
