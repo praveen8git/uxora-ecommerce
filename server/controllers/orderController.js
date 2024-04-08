@@ -59,7 +59,10 @@ const placeOrder = async (req, res) => {
 
             // save order
             const createdOrder = await Order.create({
-                products,
+                products: products.map(product => ({
+                    product: product.id, 
+                    quantity: product.quantity 
+                })),
                 subTotal,
                 shippingFees,
                 total,
@@ -92,7 +95,7 @@ const placeOrder = async (req, res) => {
             res.status(500).json({ message: error })
         }
 
-    } else {
+    } else { // when user was already loggedin and orderby was defined
         let address = {
             street,
             city,
@@ -103,7 +106,10 @@ const placeOrder = async (req, res) => {
         // save order
         try {
             const createdOrder = await Order.create({
-                products,
+                products: products.map(product => ({
+                    product: product.id, 
+                    quantity: product.quantity 
+                })),
                 subTotal,
                 shippingFees,
                 total,
@@ -140,7 +146,7 @@ const getOrderById = async (req, res) => {
     const { id } = req.params; // destucturing id from request params
 
     try {
-        const order = await Order.findById(id);
+        const order = await Order.findById(id).populate(['orderBy', 'products.product']);
 
         order ?
             res.status(200).json({ success: true, order })
@@ -252,6 +258,7 @@ const getTodaysRevenue = async (req, res) => {
 const updateOrderById = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
+    console.log('updateorderbyid', status, id);
     try {
         const updatedOrder = await Order.findByIdAndUpdate(id, { $set: { orderStatus: status } }, { new: true });
         if (!updatedOrder) {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useId, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import BagContext from "../contexts/BagContext";
 import IsAuthenticatedContext from "../contexts/IsAuthenticatedContext";
@@ -37,7 +37,7 @@ const BagItem = ({ id, image, productName, quantity, salePrice }) => {
                         style={{ minHeight: 2.2 + 'rem', padding: 0.3 + 'rem' }}
                         type="number"
                         name="quantity"
-                        id="quantity"
+                        id={useId()}
                         value={quantity}
                         min={1}
                         readOnly />
@@ -75,7 +75,14 @@ const Bag = () => {
 
     const placeOrder = async (e) => {
         e.preventDefault();
-        const products = bagItems.map(item => item.id)
+        setLoading(true);
+
+        const products = bagItems.map(item => {
+            return {
+                id: item.id,
+                quantity: item.quantity
+            }
+        })
         const payload = {
             products,
             ...formData,
@@ -105,16 +112,23 @@ const Bag = () => {
                     });
                     toast.success("logged in successfully!", { className: "toastify" })
 
-                    // navigate("/profile")
+                    
                 }
 
-                navigate('/profile');
+                // navigate('/profile');
             }
+
+            setLoading(false);
 
 
         } catch (error) {
             console.error(error);
-            toast.error("Couldn't place order due to an Error", { className: "toastify" })
+            error.response.status === 400 ?
+                toast.error(error.response.data.message, { className: "toastify" })
+                : toast.error("Couldn't place order due to an Error", { className: "toastify" })
+        } finally {
+            setLoading(false);
+            navigate("/profile");
         }
     }
 

@@ -3,10 +3,15 @@ import mongoose from "mongoose";
 const OrderSchema = new mongoose.Schema({
     products: {
         type: [{ 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: 'Product',
-            // unique: true
-         }],
+            product: {
+                type: mongoose.Schema.Types.ObjectId, 
+                ref: 'Product',
+            },
+            quantity: {
+                type: Number,
+                required: true
+            }
+        }],
         required: true
     },
     shippingAddress: {
