@@ -64,7 +64,7 @@ const ProductSlider = () => {
         onSwiper={(swiper) => console.log(swiper)}
       >
         {
-          products.map(product => (
+          products?.map(product => (
             <SwiperSlide key={product._id}>
               <ProductCard
                 id={product._id}
