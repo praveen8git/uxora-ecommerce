@@ -1,6 +1,121 @@
-import { Fade, Slide } from "react-awesome-reveal"
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Fade, Slide } from "react-awesome-reveal";
+
+const { VITE_SERVER } = import.meta.env;
 
 const Dashboard = () => {
+  const [newCustomersCount, setNewCustomersCount] = useState(0);
+  const [todaysOrderCount, setTodaysOrderCount] = useState(0);
+  const [processingOrdersCount, setProcessingOrdersCount] = useState(0);
+  const [todaysRevenue, setTodaysRevenue] = useState(0);
+  const [totalCustomerCount, setTotalCustomerCount] = useState(0);
+  const [totalOrderCount, setTotalOrderCount] = useState(0);
+  const [cancelledOrdersCount, setCancelledOrdersCount] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+
+  const fetchNewCustomerCount = async () => {
+    try {
+      const response = await axios.get(`${VITE_SERVER}/api/admin/new-customers`, {
+        withCredentials: true,
+      });
+      if (response.data.success) setNewCustomersCount(response.data.newCustomersCount)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const fetchTodaysOrderCount = async () => {
+    try {
+      const response = await axios.get(`${VITE_SERVER}/api/admin/todays-orders`, {
+        withCredentials: true,
+      });
+      if (response.data.success) setTodaysOrderCount(response.data.todaysOrders)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const fetchProcessingOrdersCount = async () => {
+    try {
+      const response = await axios.get(`${VITE_SERVER}/api/admin/orders/processing`, {
+        withCredentials: true,
+      });
+      if (response.data.success) setProcessingOrdersCount(response.data.orders)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const fetchTodaysRevenue = async () => {
+    try {
+      const response = await axios.get(`${VITE_SERVER}/api/admin/todays-revenue`, {
+        withCredentials: true,
+      });
+      // console.log(response.data);
+      if (response.data.success) setTodaysRevenue(response.data.revenue)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const fetchTotalCustomerCount = async () => {
+    try {
+      const response = await axios.get(`${VITE_SERVER}/api/admin/total-customers`, {
+        withCredentials: true,
+      });
+      if (response.data.success) setTotalCustomerCount(response.data.totalCustomers)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const fetchTotalOrderCount = async () => {
+    try {
+      const response = await axios.get(`${VITE_SERVER}/api/admin/total-orders`, {
+        withCredentials: true,
+      });
+      if (response.data.success) setTotalOrderCount(response.data.totalOrders)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const fetchCancelledOrdersCount = async () => {
+    try {
+      const response = await axios.get(`${VITE_SERVER}/api/admin/orders/cancelled`, {
+        withCredentials: true,
+      });
+      if (response.data.success) setCancelledOrdersCount(response.data.orders)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const fetchTotalRevenue = async () => {
+    try {
+      const response = await axios.get(`${VITE_SERVER}/api/admin/todays-revenue`, {
+        withCredentials: true,
+      });
+      // console.log(response.data);
+      if (response.data.success) setTotalRevenue(response.data.revenue)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchNewCustomerCount();
+    fetchTodaysOrderCount();
+    fetchProcessingOrdersCount();
+    fetchTodaysRevenue();
+    fetchTotalCustomerCount();
+    fetchTotalOrderCount();
+    fetchCancelledOrdersCount();
+    fetchTotalRevenue();
+
+  }, [])
+
   return (
     <main>
       <section className="features container-fluid mt-3 p-0">
@@ -16,7 +131,7 @@ const Dashboard = () => {
                         New Customers
                       </h3>
                       <p className="text-center display-1 bag">
-                        7
+                        {newCustomersCount}
                       </p>
                     </div>
                   </div>
@@ -33,7 +148,7 @@ const Dashboard = () => {
                         Today's Orders
                       </h3>
                       <p className="text-center display-1 bag">
-                        11
+                        {todaysOrderCount}
                       </p>
                     </div>
                   </div>
@@ -50,7 +165,7 @@ const Dashboard = () => {
                         Orders Processing
                       </h3>
                       <p className="text-center display-1 bag">
-                        24
+                        {processingOrdersCount}
                       </p>
                     </div>
                   </div>
@@ -59,7 +174,7 @@ const Dashboard = () => {
             </div>
 
             <div className="col-sm-12 col-md-6 col-lg-3">
-              <Slide delay={150}  className="h-100">
+              <Slide delay={150} className="h-100">
                 <div className="card container-fluid bg-color h-100">
                   <div className="card-body p-4">
                     <div className="row h-100 ">
@@ -67,7 +182,7 @@ const Dashboard = () => {
                         {'Today\'s Revenue ($)'}
                       </h3>
                       <p className="text-center display-3 bag">
-                        224
+                        {todaysRevenue}
                       </p>
                     </div>
                   </div>
@@ -90,7 +205,7 @@ const Dashboard = () => {
                         Total Customers
                       </h3>
                       <p className="text-center display-1 bag">
-                        100
+                        {totalCustomerCount}
                       </p>
                     </div>
                   </div>
@@ -108,7 +223,7 @@ const Dashboard = () => {
                         Total Orders
                       </h3>
                       <p className="text-center display-1 bag">
-                        211
+                        {totalOrderCount}
                       </p>
                     </div>
                   </div>
@@ -125,7 +240,7 @@ const Dashboard = () => {
                         Cancelled Orders
                       </h3>
                       <p className="text-center display-1 bag">
-                        30
+                        {cancelledOrdersCount}
                       </p>
                     </div>
                   </div>
@@ -134,7 +249,7 @@ const Dashboard = () => {
             </div>
 
             <div className="col-sm-12 col-md-6 col-lg-3">
-              <Slide delay={150}  className="h-100">
+              <Slide delay={150} className="h-100">
                 <div className="card container-fluid bg-color h-100">
                   <div className="card-body p-4">
                     <div className="row h-100 ">
@@ -142,7 +257,7 @@ const Dashboard = () => {
                         {'Total Revenue ($)'}
                       </h3>
                       <p className="text-center display-3 bag">
-                        32224
+                        {totalRevenue}
                       </p>
                     </div>
                   </div>

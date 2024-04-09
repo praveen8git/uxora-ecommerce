@@ -177,7 +177,7 @@ const getOrdersByCustomer = async (req, res) => {
 const getOrdersByStatus = async (req, res) => {
     const { status } = req.params;
     try {
-        const orders = await Order.find({ orderStatus: status });
+        const orders = await Order.countDocuments({ orderStatus: status });
 
         orders ?
             res.status(200).json({ success: true, orders })
@@ -208,7 +208,7 @@ const getTodaysOrders = async (req, res) => {
         const endOfDay = new Date();
         endOfDay.setHours(23, 59, 59, 999);
 
-        const todaysOrders = await Order.find({
+        const todaysOrders = await Order.countDocuments({
             createdAt: { $gte: startOfDay, $lte: endOfDay }
         });
 
@@ -225,7 +225,7 @@ const getTotalRevenue = async (req, res) => {
         const totalRevenue = await Order.aggregate([
             { $group: { _id: null, total: { $sum: '$total' } } }
         ]);
-        res.status(200).json(totalRevenue[0].total);
+        res.status(200).json({ success: true, revenue: totalRevenue[0].total });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: error });
@@ -248,7 +248,7 @@ const getTodaysRevenue = async (req, res) => {
             },
             { $group: { _id: null, total: { $sum: '$total' } } }
         ]);
-        res.status(200).json(todaysRevenue[0].total);
+        res.status(200).json({ success: true, revenue: todaysRevenue[0].total });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: error });

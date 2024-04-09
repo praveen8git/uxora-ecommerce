@@ -24,7 +24,7 @@ adminRouter.patch('/order/:id', auth, isAdmin, updateOrderById); // order update
 adminRouter.delete('/order/:id', auth, isAdmin, deleteOrderById); // order details page
 adminRouter.get('/all-customers', getAllCustomers); // customers table
 
-adminRouter.get('total-customers', auth, isAdmin, getTotalCustomer); // dashboard api
+adminRouter.get('/total-customers', auth, isAdmin, getTotalCustomer); // dashboard api
 adminRouter.get('/new-customers', auth, isAdmin, getNewCustomersCount); // dashboard api
 adminRouter.delete('/delete-customer/:id', auth, isAdmin, deleteCustomerById); // customer details page
 
