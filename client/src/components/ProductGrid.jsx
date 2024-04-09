@@ -7,7 +7,8 @@ const ProductGrid = (props) => {
     return (
         <section className="product-grid container-fluid p-0">
             <div className="row g-3">
-                {props.products.map(product => (
+                {props.products.length > 0 ?
+                props.products.map(product => (
                     <div className="col-lg-4 col-md-6 col-sm-12" key={product._id}>
                         <ProductCard
                             id={product._id}
@@ -17,7 +18,7 @@ const ProductGrid = (props) => {
                             image={product.image}
                         />
                     </div>
-                ))}
+                )) : (<div className='text-center fs-3 mb-5'>No Products Found!</div>)}
             </div>
         </section>
     )

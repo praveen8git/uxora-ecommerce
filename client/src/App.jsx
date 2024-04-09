@@ -44,7 +44,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop category={'all'} />} />
             <Route path="/kids" element={<Shop category={'kids'} subCategory={''} />} />
-            <Route path="/search" element={<Search />} />
+            <Route path="/search/:query" element={<Search />} />
             <Route path="/product/:id" element={<SingleProduct />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />

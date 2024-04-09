@@ -10,7 +10,7 @@ import IsAuthenticatedContext from '../contexts/IsAuthenticatedContext';
 const Header = () => {
 
     // const { search, SetSearch } = useContext(appContext);
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     // //debouncing 
     // const handleSearchDebounce = (text) => {
@@ -25,6 +25,13 @@ const Header = () => {
 
     const { bagItems } = useContext(BagContext);
     const { isAuthenticated, user } = useContext(IsAuthenticatedContext);
+
+    const [searchQuery, SetSearchQuery] = useState();
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        navigate(`/search/${searchQuery}`)
+    }
 
     return (
         <>
@@ -45,10 +52,23 @@ const Header = () => {
                     </button>
                     <div className="collapse navbar-collapse row navbarNav" id="navbarNav">
                         <ul className="navbar-nav col-sm-8 justify-content-end">
-                            <form className="search d-flex w-75 m-1" role="search">
-                                <input onChange={(e) => handleSearchDebounce(e.target.value)} className="form-control me-2 w-100 bg-color border-0" type="search" placeholder="&#xF002; Search"
+                            <form
+                                onSubmit={handleSearch}
+                                className="search d-flex w-75 m-1"
+                                role="search">
+                                <input
+                                    // onChange={(e) => handleSearchDebounce(e.target.value)}
+                                    onChange={(e) => SetSearchQuery(e.target.value)}
+                                    className="form-control me-2 w-100 bg-color border-0"
+                                    type="search" placeholder="&#xF002; Search"
                                     aria-label="Search" />
-                                <button className="btn font-color d-none" type="submit">search<i className="fa fa-magnifying-glass"></i></button>
+
+                                <button
+                                    className="btn font-color visually-hidden"
+                                    type="submit">
+                                    search
+                                    <i className="fa fa-magnifying-glass"></i>
+                                </button>
                             </form>
                         </ul>
                         <ul className="navbar-nav col-sm-4 font-color justify-content-end">

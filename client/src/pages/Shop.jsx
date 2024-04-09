@@ -9,19 +9,24 @@ const { VITE_SERVER } = import.meta.env;
 const Shop = ({ category, subCategory }) => {
 
 
+  const [loading, setLoading] = useState();
   const [products, setProducts] = useState([]);
 
   const fetchAllProducts = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`${VITE_SERVER}/api/all-products`, {
         withCredentials: true,
       });
       console.log("all-products", response.data);
-      setProducts(response.data.allProducts)
+      setProducts(response.data.allProducts);
+      setLoading(false);
 
     } catch (error) {
       console.error(error);
       error.message ? toast.error(error.message, { className: "toastify" }) : null
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -55,7 +60,16 @@ const Shop = ({ category, subCategory }) => {
       <PageTitle
         title={`Shop / ${category} - ${(subCategory ? subCategory : "")}`}
       />
-      <ProductGrid products={[...products]} />
+      {
+        loading ?
+          (
+            <div className='d-flex justify-content-center align-items-center h-100 w-100'>
+              <span className="spinner-grow spinner-grow bag" aria-hidden="true"></span>
+            </div>
+          ) : (
+            <ProductGrid products={[...products]} />
+          )
+      }
       <Footer />
     </>
   )
