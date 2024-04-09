@@ -35,7 +35,9 @@ const login = async (req, res) => {
             // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day
             // expires: new Date(Date.now() + 1 * 60 * 1000), // 1 min
             maxAge: 24 * 60 * 60 * 1000, // 1 day
-            httpOnly: true
+            httpOnly: true,
+            secure: true, // Set to true if your site is served over HTTPS
+            sameSite: 'none' // Consider setting this if your frontend and backend are on different domains
         }
 
         res.status(201).cookie("token", token, cookieOptions).json({ success: true, customer });
@@ -51,7 +53,7 @@ const login = async (req, res) => {
 const isLoggedIn = (req, res) => {
     const { user } = req
     // console.log(user);
-    res.status(201).json({ success: true, user});
+    res.status(201).json({ success: true, user });
 }
 
 const logout = async (req, res) => {

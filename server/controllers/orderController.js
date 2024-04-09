@@ -60,8 +60,8 @@ const placeOrder = async (req, res) => {
             // save order
             const createdOrder = await Order.create({
                 products: products.map(product => ({
-                    product: product.id, 
-                    quantity: product.quantity 
+                    product: product.id,
+                    quantity: product.quantity
                 })),
                 subTotal,
                 shippingFees,
@@ -81,7 +81,9 @@ const placeOrder = async (req, res) => {
             const cookieOptions = {
                 // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day
                 maxAge: 24 * 60 * 60 * 1000, // 1 day
-                httpOnly: true
+                httpOnly: true,
+                secure: true, // Set to true if your site is served over HTTPS
+                sameSite: 'none' // Consider setting this if your frontend and backend are on different domains
             }
 
             res.status(201)
@@ -107,8 +109,8 @@ const placeOrder = async (req, res) => {
         try {
             const createdOrder = await Order.create({
                 products: products.map(product => ({
-                    product: product.id, 
-                    quantity: product.quantity 
+                    product: product.id,
+                    quantity: product.quantity
                 })),
                 subTotal,
                 shippingFees,
@@ -182,7 +184,7 @@ const getOrdersByStatus = async (req, res) => {
         orders ?
             res.status(200).json({ success: true, orders })
             : res.status(404).json({ success: false, message: "Orders not found!" })
-            
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: error });
@@ -280,7 +282,7 @@ const deleteOrderById = async (req, res) => {
             return res.status(404).json({ message: 'Order not found' });
         }
         res.status(200).json({ success: true, message: 'Order deleted successfully' });
-        
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: error });
