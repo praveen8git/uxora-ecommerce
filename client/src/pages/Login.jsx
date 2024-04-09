@@ -49,10 +49,10 @@ const Login = () => {
         } catch (error) {
             console.log(error);
             if (error.code === "ERR_NETWORK") {
-                toast.error("Server Down!");
+                toast.error("Server Down!", { className: "toastify" });
             }
             error?.response?.status === 401
-                ? toast.error(error.response.data.message)
+                ? toast.error(error.response.data.message, { className: "toastify" })
                 : toast.error("Server Error");
         } finally {
             setLoading(false);
