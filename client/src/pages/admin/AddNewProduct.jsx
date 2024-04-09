@@ -60,7 +60,7 @@ const AddNewProduct = () => {
 
     console.log({ ...productData, image: imageUrl })
 
-    try {
+    try { // send data to server to store in DB
       const response = await axios.post(
         `${VITE_SERVER}/api/admin/add-product`,
         {
@@ -429,7 +429,7 @@ const AddNewProduct = () => {
                   <button type="submit"
                     className="btn text-uppercase d-block my-2 py-3 w-100 fw-bold"
                     style={{ fontSize: 0.88 + 'rem' }}
-                    disabled={loading}>
+                    disabled={loading}> 
                     {
                       loading ? (
                         <>

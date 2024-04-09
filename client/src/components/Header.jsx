@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useContext } from 'react';
-import debounce from 'lodash/debounce';
+// import debounce from 'lodash/debounce';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 
@@ -28,6 +28,7 @@ const Header = () => {
 
     const [searchQuery, SetSearchQuery] = useState();
 
+    // redirects to search page along with query string
     const handleSearch = (e) => {
         e.preventDefault();
         navigate(`/search/${searchQuery}`)
@@ -72,7 +73,7 @@ const Header = () => {
                             </form>
                         </ul>
                         <ul className="navbar-nav col-sm-4 font-color justify-content-end">
-                            {
+                            {   // if user is logged in it will show Profile/Dashboard button else a login button
                                 !isAuthenticated ? (
                                     <Link to="/login" id="login" className="btn nav-link font-color bg-color px-4 py-2 mx-2 text-uppercase"
                                         style={{ fontSize: 0.88 + 'rem' }}>

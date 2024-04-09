@@ -14,6 +14,10 @@ const OrderDetails = () => {
     const [selectedStatus, setSelectedStatus] = useState();
 
     let { id } = useParams();
+   /**
+    * The fetchOrder function is an asynchronous function that fetches order data from a server using
+    * axios, updates state based on the response, and handles loading and error states.
+    */
     const fetchOrder = async () => {
         try {
             setLoading(true);
@@ -36,6 +40,10 @@ const OrderDetails = () => {
         }
     }
 
+    /**
+     * The `deleteHandler` function sends a DELETE request to the server to delete an order, displaying
+     * success or error messages accordingly.
+     */
     const deleteHandler = async (id) => {
         setLoading(true);
 
@@ -62,6 +70,10 @@ const OrderDetails = () => {
         }
     }
 
+    /**
+     * The function `updateOrder` is an asynchronous function that sends a PATCH request to update the
+     * status of an order and handles the response accordingly.
+     */
     const updateOrder = async () => {
         let patch = {
             status: selectedStatus

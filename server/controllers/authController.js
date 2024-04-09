@@ -6,6 +6,10 @@ import Customer from "../models/Customer.js";
 const { JWT_SECRET } = process.env;
 
 
+/**
+ * The function `login` handles user authentication by checking email and password, generating a JWT
+ * token, setting a cookie, and returning a success response with the customer details.
+ */
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;

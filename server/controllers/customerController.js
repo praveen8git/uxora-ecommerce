@@ -1,5 +1,10 @@
 import Customer from "../models/Customer.js";
 
+/**
+ * The function `getAllCustomers` retrieves all customers with the role "customer" from the database,
+ * removes the password field from each customer object, and responds with the modified customer data.
+ * 
+ */
 const getAllCustomers =  async (req, res) => {
     try {
         const allCustomers = await Customer.find({role: "customer"});
@@ -16,6 +21,10 @@ const getAllCustomers =  async (req, res) => {
     }
 }
 
+/**
+ * The function `getCustomerById` retrieves a customer by their ID, removes the password from the
+ * customer object, and sends a response with the customer data or an error message.
+ */
 const getCustomerById =  async (req, res) => {
     const { id } = req.params; // destucturing id from request params
 
@@ -35,6 +44,10 @@ const getCustomerById =  async (req, res) => {
     }
 }
 
+/**
+ * The function `getNewCustomersCount` calculates the count of new customers created within the last 24
+ * hours and returns this count in a JSON response.
+ */
 const getNewCustomersCount =  async (req, res) => {
     try {
         // Calculate the date 24 hours ago
@@ -50,6 +63,10 @@ const getNewCustomersCount =  async (req, res) => {
     }
 }
 
+/**
+ * The function `getTotalCustomer` retrieves the total count of customers from a database and sends it
+ * as a JSON response with success status.
+ */
 const getTotalCustomer =  async (req, res) => {
     try {
         const totalCustomers = await Customer.countDocuments({});
@@ -60,6 +77,10 @@ const getTotalCustomer =  async (req, res) => {
     }
 }
 
+/**
+ * The function `updateCustomerById` updates a customer's profile picture by their ID and returns the
+ * updated customer object.
+ */
 const updateCustomerById =  async (req, res) => {
     const { id } = req.params;
     const { profilePicture } = req.body;
@@ -79,6 +100,10 @@ const updateCustomerById =  async (req, res) => {
     }
 }
 
+/**
+ * The function `deleteCustomerById` deletes a customer by their ID and returns a success message if
+ * the deletion is successful.
+ */
 const deleteCustomerById =  async (req, res) => {
     const { id } = req.params;
 

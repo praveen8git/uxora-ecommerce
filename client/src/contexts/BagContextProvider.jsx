@@ -3,6 +3,15 @@ import BagContext from "./BagContext";
 import { toast } from "react-toastify";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
+/**
+ * The `BagContextProvider` function in JavaScript React manages a shopping bag state with functions to
+ * add, remove, empty, increase, and decrease item quantities.
+ * @returns The `BagContextProvider` component is returning the `BagContext.Provider` component with
+ * the provided context values and the children components passed to it. The context values include
+ * `bagItems`, `addToBag`, `removeFromBag`, `emptyBag`, `increaseQuantity`, and `decreaseQuantity`
+ * functions that can be accessed by the children components within the context of the
+ * `BagContext.Provider`.
+ */
 const BagContextProvider = ({ children }) => {
     // const [bagItems, setBagItems] = useState([]);
     const [bagItems, setBagItems] = useLocalStorage('bag', []);

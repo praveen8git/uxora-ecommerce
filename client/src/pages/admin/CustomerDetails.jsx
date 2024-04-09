@@ -14,6 +14,10 @@ const CustomerDetails = () => {
   const [orders, setOrders] = useState([]);
 
   let { id } = useParams();
+  /**
+   * The function fetches customer data from a server using an async request and handles errors
+   * appropriately.
+   */
   const fetchCustomer = async () => {
     try {
       const response = await axios.get(`${VITE_SERVER}/api/customer/${id}`, {
@@ -31,6 +35,10 @@ const CustomerDetails = () => {
     }
   }
 
+  /**
+   * The function `fetchOrders` is an asynchronous function that fetches orders from a server using
+   * axios, handles the response data, and navigates to a 404 page if there is an error.
+   */
   const fetchOrders = async () => {
     try {
       const response = await axios.get(`${VITE_SERVER}/api/orders/${id}`, {
@@ -47,6 +55,10 @@ const CustomerDetails = () => {
     }
   }
 
+  /**
+   * The `deleteHandler` function is an asynchronous function that sends a delete request to the server
+   * to delete a customer by ID, with error handling and toast notifications.
+   */
   const deleteHandler = async (id) => {
     setLoading(true);
 

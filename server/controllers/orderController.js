@@ -5,6 +5,10 @@ import bcrypt from "bcryptjs";
 
 const { JWT_SECRET } = process.env;
 
+/**
+ * The `placeOrder` function in JavaScript handles the process of placing an order, including creating
+ * a new customer account if needed and saving the order details.
+ */
 const placeOrder = async (req, res) => {
     const {
         orderBy,
@@ -131,6 +135,10 @@ const placeOrder = async (req, res) => {
 }
 
 // Get all orders
+/**
+ * The function `getAllOrders` retrieves all orders from the database and responds with success along
+ * with the orders array or an error message if there is an issue.
+ */
 const getAllOrders = async (req, res) => {
     try {
         const allOrders = await Order.find({});
@@ -144,6 +152,11 @@ const getAllOrders = async (req, res) => {
 }
 
 // Get an Order by ID
+/**
+ * The function `getOrderById` retrieves an order by its ID from the database and populates information
+ * about the order's creator and products, then returns the order if found or an error message if not
+ * found.
+ */
 const getOrderById = async (req, res) => {
     const { id } = req.params; // destucturing id from request params
 
@@ -161,6 +174,10 @@ const getOrderById = async (req, res) => {
 }
 
 
+/**
+ * This function retrieves orders based on a customer ID and returns them in a JSON response with
+ * appropriate status codes.
+ */
 const getOrdersByCustomer = async (req, res) => {
     const { id } = req.params;
     try {
@@ -176,6 +193,11 @@ const getOrdersByCustomer = async (req, res) => {
     }
 }
 
+/**
+ * The function `getOrdersByStatus` retrieves the count of orders based on a specified status and
+ * returns a success message with the count or an error message if no orders are found.
+ * `
+ */
 const getOrdersByStatus = async (req, res) => {
     const { status } = req.params;
     try {
@@ -191,6 +213,10 @@ const getOrdersByStatus = async (req, res) => {
     }
 }
 
+/**
+ * The function `getTotalOrder` asynchronously retrieves the total count of orders and sends a JSON
+ * response with the count.
+ */
 const getTotalOrder = async (req, res) => {
     try {
         const totalOrders = await Order.countDocuments();

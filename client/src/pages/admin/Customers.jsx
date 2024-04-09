@@ -11,6 +11,10 @@ const Customers = () => {
 
   const [allCustomers, setAllCustomers] = useState([]);
 
+  /**
+   * The function `fetchAllCustomers` fetches all customers from a server using axios in a React
+   * application.
+   */
   const fetchAllCustomers = async () => {
     try {
       setLoading(true);
@@ -29,6 +33,10 @@ const Customers = () => {
     }
   }
 
+  /**
+   * The `deleteHandler` function is an asynchronous function that sends a delete request to the server
+   * to delete a customer, handles the response, and updates the UI accordingly.
+   */
   const deleteHandler = async (id) => {
     setLoading(true);
 

@@ -11,6 +11,10 @@ const Products = () => {
 
   const [allProducts, setAllProducts] = useState([]);
 
+  /**
+   * The function `fetchAllProducts` fetches all products from a server using axios in a React
+   * application, updating state and handling loading and error states.
+   */
   const fetchAllProducts = async () => {
     try {
       setLoading(true);
@@ -29,6 +33,10 @@ const Products = () => {
     }
   }
 
+  /**
+   * The `deleteHandler` function is an asynchronous function that sends a delete request to a server
+   * to delete a product by its ID, and handles success and error responses accordingly.
+   */
   const deleteHandler = async (id) => {
     setLoading(true);
 

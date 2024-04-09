@@ -17,6 +17,10 @@ const Profile = () => {
   const { user, isAuthenticated } = useContext(IsAuthenticatedContext);
   // console.log(user._id);
 
+  /**
+   * The function `fetchCustomer` asynchronously fetches customer data from a server using axios,
+   * handles errors, and updates the customer state or navigates to a 404 page based on the response.
+   */
   const fetchCustomer = async () => {
     try {
       const response = await axios.get(`${VITE_SERVER}/api/customer/${user._id}`, {
@@ -33,6 +37,10 @@ const Profile = () => {
     }
   }
 
+  /**
+   * The function fetches the orders for a specific user from a server and handles any errors that may
+   * occur during the process.
+   */
   const fetchMyOrders = async () => {
     try {
       const response = await axios.get(`${VITE_SERVER}/api/orders/${user._id}`, {

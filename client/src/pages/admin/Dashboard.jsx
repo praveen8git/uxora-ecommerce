@@ -14,6 +14,10 @@ const Dashboard = () => {
   const [cancelledOrdersCount, setCancelledOrdersCount] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
 
+  /**
+   * The function `fetchNewCustomerCount` asynchronously fetches the count of new customers from a
+   * server API endpoint and updates the count if the response is successful.
+   */
   const fetchNewCustomerCount = async () => {
     try {
       const response = await axios.get(`${VITE_SERVER}/api/admin/new-customers`, {
@@ -25,6 +29,10 @@ const Dashboard = () => {
     }
   }
 
+  /**
+   * The function `fetchTodaysOrderCount` asynchronously fetches today's order count from a server API
+   * endpoint using axios in a React application.
+   */
   const fetchTodaysOrderCount = async () => {
     try {
       const response = await axios.get(`${VITE_SERVER}/api/admin/todays-orders`, {
@@ -36,6 +44,10 @@ const Dashboard = () => {
     }
   }
 
+  /**
+   * This function fetches the count of processing orders from a server using axios in a React
+   * application.
+   */
   const fetchProcessingOrdersCount = async () => {
     try {
       const response = await axios.get(`${VITE_SERVER}/api/admin/orders/processing`, {
@@ -47,6 +59,10 @@ const Dashboard = () => {
     }
   }
 
+  /**
+   * The function `fetchTodaysRevenue` asynchronously fetches today's revenue data from a server API
+   * endpoint and sets the retrieved revenue value if the response is successful.
+   */
   const fetchTodaysRevenue = async () => {
     try {
       const response = await axios.get(`${VITE_SERVER}/api/admin/todays-revenue`, {
@@ -59,6 +75,11 @@ const Dashboard = () => {
     }
   }
 
+  /**
+   * The function `fetchTotalCustomerCount` asynchronously fetches the total customer count from a
+   * server API endpoint and updates the total customer count in the application state if the response
+   * is successful.
+   */
   const fetchTotalCustomerCount = async () => {
     try {
       const response = await axios.get(`${VITE_SERVER}/api/admin/total-customers`, {
@@ -70,6 +91,10 @@ const Dashboard = () => {
     }
   }
 
+  /**
+   * The function `fetchTotalOrderCount` asynchronously fetches the total order count from a server API
+   * endpoint and sets the count if the response is successful.
+   */
   const fetchTotalOrderCount = async () => {
     try {
       const response = await axios.get(`${VITE_SERVER}/api/admin/total-orders`, {
@@ -81,6 +106,10 @@ const Dashboard = () => {
     }
   }
 
+  /**
+   * The function fetches the count of cancelled orders from a server API endpoint using axios in a
+   * React application.
+   */
   const fetchCancelledOrdersCount = async () => {
     try {
       const response = await axios.get(`${VITE_SERVER}/api/admin/orders/cancelled`, {
@@ -92,6 +121,10 @@ const Dashboard = () => {
     }
   }
 
+  /**
+   * The function fetches today's revenue data from the server and sets the total revenue if the
+   * response is successful.
+   */
   const fetchTotalRevenue = async () => {
     try {
       const response = await axios.get(`${VITE_SERVER}/api/admin/todays-revenue`, {

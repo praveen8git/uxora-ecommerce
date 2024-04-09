@@ -19,7 +19,11 @@ const Login = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    // Handles login
+    /**
+     * The `handleLogin` function is an asynchronous function that handles user login by sending a POST
+     * request to the server, processing the response, and displaying appropriate messages based on the
+     * outcome.
+     */
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);

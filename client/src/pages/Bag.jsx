@@ -68,11 +68,19 @@ const Bag = () => {
 
     const [formData, setFormData] = useState({});
 
+    /**
+     * The onChangeHandler function updates the formData state with the new value based on the input
+     * field name.
+     */
     const onChangeHandler = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
+    /**
+     * The `placeOrder` function is an asynchronous function that handles placing an order by sending a
+     * POST request with order details to a server, handling success and error responses accordingly.
+     */
     const placeOrder = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -111,8 +119,7 @@ const Bag = () => {
                         role: response.data.createdCustomer.role
                     });
                     toast.success("logged in successfully!", { className: "toastify" })
-
-                    
+        
                 }
 
                 // navigate('/profile');

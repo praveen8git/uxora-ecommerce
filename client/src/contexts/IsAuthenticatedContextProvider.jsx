@@ -3,6 +3,13 @@ import IsAuthenticatedContext from './IsAuthenticatedContext';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * The `IsAuthenticatedContextProvider` function manages user authentication state in a React
+ * application, providing login and logout functionality.
+ * @returns The `IsAuthenticatedContextProvider` component is being returned. It provides a context
+ * provider with values for `isAuthenticated`, `user`, `login`, and `logout` that can be accessed by
+ * its children components.
+ */
 const IsAuthenticatedContextProvider = ({ children }) => {
     const navigate = useNavigate();
 

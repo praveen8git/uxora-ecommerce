@@ -8,12 +8,12 @@ const Logout = () => {
 
     const { logout } = useContext(IsAuthenticatedContext);
 
-    const logOut = async () => {
+    const logOut = async () => { // logs out from server
         const response = await axios.get(`${VITE_SERVER}/auth/logout`, {
             withCredentials: true,
         });
         console.log(response.data);
-        logout();
+        logout(); // calling context fn
     };
 
     useEffect(() => {

@@ -7,6 +7,11 @@ const {
 
 const url = `https://api.cloudinary.com/v1_1/${Cloud_Name}/image/upload`;
 
+/**
+ * The useImageUpload custom hook uploads an image file.
+ * @returns The function `useImageUpload` is returning the `secure_url` property from the data of the
+ * uploaded image.
+ */
 const useImageUpload = async (file) => {
     const data = {
         file,

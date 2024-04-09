@@ -13,6 +13,10 @@ const Orders = () => {
 
   const [selectedStatus, setSelectedStatus] = useState();
 
+  /**
+   * The function fetches all orders from the server and updates the state with the retrieved data
+   * while handling loading states and error messages.
+   */
   const fetchAllOrders = async () => {
     try {
       setLoading(true);
@@ -35,6 +39,11 @@ const Orders = () => {
     }
   }
 
+  /**
+   * The `deleteHandler` function is an asynchronous function that sends a delete request to a server
+   * to delete an order by ID, updates the UI based on the response, and handles any errors that may
+   * occur.
+   */
   const deleteHandler = async (id) => {
     setLoading(true);
 
@@ -69,6 +78,7 @@ const Orders = () => {
 
   // for orders filter
   useEffect(() => {
+    /* for filtering the orders based on the `selectedStatus` state. */
     if (selectedStatus === 'all') {
       setFilteredOrders(allOrders)
 

@@ -30,6 +30,10 @@ const Shop = ({ category, subCategory }) => {
     }
   }
 
+  /**
+   * The function `fetchProductsByCategory` asynchronously fetches products based on a specified
+   * category and subcategory using an API endpoint.
+   */
   const fetchProductsByCategory = async (category, subCategory) => {
     try {
       console.log(category, subCategory);

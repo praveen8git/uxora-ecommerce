@@ -6,6 +6,7 @@ const ProductCard = ({ id, productName, regularPrice, salePrice, image }) => {
 
     const { addToBag } = useContext(BagContext);
 
+    // this item will be saved to bag context
     const item = {
         id,
         productName,

@@ -25,8 +25,8 @@ const OrdersTable = ({ orders, action, deleteHandler }) => {
                                 </tr>
                             </thead>
                             <tbody className='font-color fs-6'>
-                                {
-                                    orders.length > 0 ?
+                                {   // check if there are orders present or not
+                                    orders.length > 0 ? 
                                         (
                                             orders.map(order => (
                                                 <tr key={order.orderId} className='border-bottom border-warning border-opacity-10'>
