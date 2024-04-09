@@ -51,7 +51,7 @@ const Orders = () => {
       setLoading(false);
       
       // remove product from table
-      setAllOrders.filter(item => item._id != id )
+      setFilteredOrders(prev => prev.filter(item => item._id != id ))
 
     } catch (error) {
       console.error(error);
