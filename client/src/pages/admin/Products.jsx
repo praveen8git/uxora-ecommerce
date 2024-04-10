@@ -53,7 +53,7 @@ const Products = () => {
       setLoading(false);
 
       // remove product from table
-      setAllProducts.filter(item => item._id != id)
+      setAllProducts(prev => prev.filter(item => item._id != id ))
 
     } catch (error) {
       console.error(error);

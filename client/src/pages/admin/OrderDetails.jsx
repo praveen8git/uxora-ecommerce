@@ -107,7 +107,7 @@ const OrderDetails = () => {
     return (
         <main className="container py-3">
             {/* <!-- Title  --> */}
-            <h1 className="title text-uppercase text-center mt-5">Order #232</h1>
+            <h1 className="title text-uppercase text-center mt-5">Order #{order?.orderId}</h1>
             <h5 className="text-uppercase text-center mb-5">
                 {/* Checkout */}
             </h5>
