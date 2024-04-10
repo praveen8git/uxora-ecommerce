@@ -53,7 +53,7 @@ const placeOrder = async (req, res) => {
             }
 
             // save customer
-            const creactedCustomer = await Customer.create({
+            const createdCustomer = await Customer.create({
                 fullName,
                 email,
                 phone,
@@ -71,16 +71,16 @@ const placeOrder = async (req, res) => {
                 shippingFees,
                 total,
                 shippingAddress: address,
-                orderBy: creactedCustomer._id
+                orderBy: createdCustomer._id
             });
 
             console.log("A new order received!");
 
             // Authenticate for auto-login
-            const token = jwt.sign({ _id: creactedCustomer._id, role: creactedCustomer.role }, JWT_SECRET);
+            const token = jwt.sign({ _id: createdCustomer._id, role: createdCustomer.role }, JWT_SECRET);
 
-            creactedCustomer.token = token;
-            creactedCustomer.password = undefined;
+            createdCustomer.token = token;
+            createdCustomer.password = undefined;
 
             const cookieOptions = {
                 // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day
@@ -92,9 +92,9 @@ const placeOrder = async (req, res) => {
 
             res.status(201)
                 .cookie("token", token, cookieOptions)
-                .json({ success: true, creactedCustomer, createdOrder });
+                .json({ success: true, createdCustomer, createdOrder });
 
-            console.log("A new customer:", creactedCustomer._id, "registered!");
+            console.log("A new customer:", createdCustomer._id, "registered!");
 
         } catch (error) {
             console.log(error);
