@@ -127,7 +127,7 @@ const Dashboard = () => {
    */
   const fetchTotalRevenue = async () => {
     try {
-      const response = await axios.get(`${VITE_SERVER}/api/admin/todays-revenue`, {
+      const response = await axios.get(`${VITE_SERVER}/api/admin/total-revenue`, {
         withCredentials: true,
       });
       // console.log(response.data);
