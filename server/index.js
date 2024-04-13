@@ -6,6 +6,7 @@ import connectDB from "./configs/database.js";
 import adminRouter from "./routes/adminRoute.js";
 import customerRouter from "./routes/customerRoute.js";
 import authRouter from "./routes/authRoute.js";
+import "./utils/keepWarm.js";
 
 const { PORT } = process.env;
 
@@ -26,7 +27,11 @@ app.use('/api/admin', adminRouter);
 app.use('/api', customerRouter);
 app.use('/auth', authRouter);
 
-
+// Add the keep-warm route handler
+app.get('/keep-warm', (req, res) => {
+  res.send('Server kept warm');
+ });
+ 
 app.listen(PORT, () => {
     connectDB();
     console.log(`server listening at port ${PORT}`)
