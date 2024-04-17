@@ -61,7 +61,11 @@ const isLoggedIn = (req, res) => {
 }
 
 const logout = async (req, res) => {
-    await res.clearCookie('token', { httpOnly: true });
+    await res.clearCookie('token', { 
+        httpOnly: true,
+        secure: true, // Set to true if your site is served over HTTPS
+        sameSite: 'none' // Consider setting this if your frontend and backend are on different domains
+    });
     res.status(201).json({ success: true, message: "Logged out succesfully!" });
 
     // res.redirect('/');
